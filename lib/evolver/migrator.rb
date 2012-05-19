@@ -17,6 +17,8 @@ module Evolver
       # Iterate through each of the sessions, executing their pending migrations
       # in order.
       # sessions.each do |session|
+        # Setup the migrations database for the session.
+        #
         # Get the pending migrations for this session.
         # pending_migrations(session).each do |migration|
           # Execute the migration.

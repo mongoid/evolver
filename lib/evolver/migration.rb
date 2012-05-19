@@ -1,6 +1,9 @@
 # encoding: utf-8
+require "active_support/concern"
+
 module Evolver
   module Migration
+    extend ActiveSupport::Concern
 
     attr_reader :session
 
@@ -12,10 +15,18 @@ module Evolver
     def mark_as_executed
     end
 
-    class << self
+    module ClassMethods
+
+      def file(stack)
+        File.basename(stack).split(":")[0]
+      end
 
       def sessions(*names)
-        # Register the sessions that will be used with this migration.
+        Evolver.register(self, file(caller[0]), timestamp(caller[0]), names)
+      end
+
+      def timestamp(stack)
+        file(stack).split("-")[0]
       end
     end
   end
