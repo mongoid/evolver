@@ -1,13 +1,16 @@
 # encoding: utf-8
 require "moped"
+require "evolver/migrator"
 require "evolver/version"
 
 module Evolver
   extend self
 
-  def session
+  def run
+    # Migrator.new(sessions).execute
   end
 
-  def sessions(name)[]
+  # Register a migration as running for the provided sessions.
+  def register(migration, sessions)
   end
 end
