@@ -21,6 +21,11 @@ Database Schema Evolution for MongoDB
   in it's own `evolver` database, with an `evolutions` collection that records:
   `session_name`, `database_name`, `evolution_name`, and `evolution_time`.
 
+Compatibility
+-------------
+
+Evolver is tested against MRI 1.9.2, 1.9.3, 2.0.0, and JRuby (1.9).
+
 License
 -------
 
