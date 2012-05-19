@@ -20,6 +20,7 @@ GEM
       thor (>= 0.14.6)
     guard-rspec (0.7.2)
       guard (>= 0.10.0)
+    rake (0.9.2.2)
     rspec (2.10.0)
       rspec-core (~> 2.10.0)
       rspec-expectations (~> 2.10.0)
@@ -37,4 +38,5 @@ DEPENDENCIES
   evolver!
   guard-rspec (~> 0.7)
   moped!
+  rake
   rspec (~> 2.10)
