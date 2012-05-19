@@ -1,0 +1,15 @@
+GIT
+  remote: git://github.com/mongoid/moped.git
+  revision: cbc55047d6792158827d39d817a2a9ec8e525e46
+  specs:
+    moped (1.0.0.beta)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  moped!
