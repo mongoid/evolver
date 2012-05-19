@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "moped"
+require "evolver/extensions"
 require "evolver/migrator"
 require "evolver/version"
 
