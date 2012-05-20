@@ -5,12 +5,12 @@ describe Evolver::Migration do
   describe ".file" do
 
     let(:caller) do
-      "/some/dir/db/evolver/migrations/20120519113509-rename_bands_to_artists.rb:30"
+      "/some/dir/db/evolver/migrations/20120519113509_rename_bands_to_artists.rb:30"
     end
 
     it "returns the filename" do
       RenameBandsToArtists.file(caller).should eq(
-        "20120519113509-rename_bands_to_artists.rb"
+        "20120519113509_rename_bands_to_artists.rb"
       )
     end
   end
@@ -22,7 +22,7 @@ describe Evolver::Migration do
     end
 
     let(:file) do
-      "20120519113509-rename_bands_to_artists.rb"
+      "20120519113509_rename_bands_to_artists.rb"
     end
 
     let(:time) do
@@ -53,7 +53,7 @@ describe Evolver::Migration do
     end
 
     let(:file) do
-      "20120519113509-rename_bands_to_artists.rb"
+      "20120519113509_rename_bands_to_artists.rb"
     end
 
     let(:time) do
@@ -104,7 +104,7 @@ describe Evolver::Migration do
 
       it "adds the migration to the session" do
         registry.should eq({
-          file: "20120519113509-rename_bands_to_artists.rb",
+          file: "20120519113509_rename_bands_to_artists.rb",
           time: Time.from_evolver_timestamp("20120519113509"),
           sessions: [ :default ]
         })
@@ -115,7 +115,7 @@ describe Evolver::Migration do
   describe ".time" do
 
     let(:caller) do
-      "/some/dir/db/evolver/migrations/20120519113509-rename_bands_to_artists.rb:30"
+      "/some/dir/db/evolver/migrations/20120519113509_rename_bands_to_artists.rb:30"
     end
 
     it "returns the timestamp" do

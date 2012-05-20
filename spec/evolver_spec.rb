@@ -15,7 +15,7 @@ describe Evolver do
       end
 
       it "returns the migration instance" do
-        found.file.should eq("20120519113509-rename_bands_to_artists.rb")
+        found.file.should eq("20120519113509_rename_bands_to_artists.rb")
       end
     end
 

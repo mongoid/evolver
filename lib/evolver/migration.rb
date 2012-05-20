@@ -77,7 +77,7 @@ module Evolver
       #
       # @since 0.0.0
       def time(stack)
-        ::Time.from_evolver_timestamp(file(stack).split("-")[0])
+        ::Time.from_evolver_timestamp(file(stack)[0...14])
       end
     end
   end
