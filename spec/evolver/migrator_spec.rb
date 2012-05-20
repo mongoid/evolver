@@ -2,13 +2,17 @@ require "spec_helper"
 
 describe Evolver::Migrator do
 
-  describe "#execute" do
-
-    let(:session) do
-      Moped::Session.new([ "localhost:27017" ]).tap do |_session|
-        _session.use :evolver
-      end
+  let(:session) do
+    Moped::Session.new([ "localhost:27017" ]).tap do |_session|
+      _session.use :evolver
     end
+  end
+
+  before(:all) do
+    session[:evolver_migrations].find.remove_all
+  end
+
+  describe "#execute" do
 
     let(:migrator) do
       described_class.new([ session ])
@@ -47,12 +51,14 @@ describe Evolver::Migrator do
       end
 
       it "executes the first migration" do
+        p session[:labels].find.to_a
         session[:labels].find.first["artists"].should eq(
           [ "Depeche Mode", "Erasure" ]
         )
       end
 
       it "executes the second migration" do
+        p session[:labels].find.to_a
         session[:labels].find.first["likes"].should eq(0)
       end
     end
