@@ -5,11 +5,10 @@ module Evolver
   module Migration
     extend ActiveSupport::Concern
 
-    attr_reader :session
+    attr_reader :file, :session, :time
 
-    # Inject the session that this migration will use.
-    def initialize(session)
-      # @session = session
+    def initialize(file, session, time)
+      @file, @session, @time = file, session, time
     end
 
     def mark_as_executed
@@ -22,11 +21,11 @@ module Evolver
       end
 
       def sessions(*names)
-        Evolver.register(self, file(caller[0]), timestamp(caller[0]), names)
+        Evolver.register(self, file(caller[0]), time(caller[0]), names)
       end
 
-      def timestamp(stack)
-        file(stack).split("-")[0]
+      def time(stack)
+        ::Time.from_evolver_timestamp(file(stack).split("-")[0])
       end
     end
   end

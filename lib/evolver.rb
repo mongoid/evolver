@@ -16,9 +16,7 @@ module Evolver
   end
 
   # Register a migration as running for the provided sessions.
-  def register(migration, file, timestamp, sessions)
-    registry.store(
-      migration, { file: file, timestamp: timestamp, sessions: sessions }
-    )
+  def register(migration, file, time, sessions)
+    registry.store(migration, { file: file, time: time, sessions: sessions })
   end
 end
