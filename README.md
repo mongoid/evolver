@@ -25,6 +25,9 @@ Database Schema Evolution for MongoDB
 
 - Ensuring all migrations always run in safe mode.
 
+- Rake task `db:evolver:stats` that gives information on run and pending
+  migrations on each session.
+
 Compatibility
 -------------
 
