@@ -7,6 +7,23 @@ require "evolver/version"
 module Evolver
   extend self
 
+  # Get an instance of the migration class from the registry with the provided
+  # session.
+  #
+  # @example Get the migration.
+  #   Evolver.find("MoveSomeData", session)
+  #
+  # @param [ String ] migration The name of the migration class.
+  # @param [ Moped::Session ] session The current session.
+  #
+  # @return [ Migration ] The instantiated migration.
+  #
+  # @since 0.0.0
+  def find(migration, session)
+    metadata = registry.fetch(migration)
+    Object.const_get(migration).new(metadata[:file], session, metadata[:time])
+  end
+
   # Get evolver's registry of migration metadata.
   #
   # @example Get the registry.
@@ -35,10 +52,5 @@ module Evolver
   # @since 0.0.0
   def register(migration, file, time, sessions)
     registry.store(migration, { file: file, time: time, sessions: sessions })
-  end
-
-  def find(migration, session)
-    metadata = registry.fetch(migration)
-    Object.const_get(migration).new(metadata[:file], session, metadata[:time])
   end
 end
