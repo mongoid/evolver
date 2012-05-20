@@ -2,6 +2,7 @@
 require "moped"
 require "evolver/extensions"
 require "evolver/migrator"
+require "evolver/railtie" if defined?(Rails)
 require "evolver/version"
 
 module Evolver
@@ -22,6 +23,12 @@ module Evolver
   def find(migration, session)
     metadata = registry.fetch(migration)
     Object.const_get(migration).new(metadata[:file], session, metadata[:time])
+  end
+
+  def generate
+  end
+
+  def migrate
   end
 
   # Get evolver's registry of migration metadata.
@@ -52,5 +59,11 @@ module Evolver
   # @since 0.0.0
   def register(migration, file, time, sessions)
     registry.store(migration, { file: file, time: time, sessions: sessions })
+  end
+
+  def revert
+  end
+
+  def stats
   end
 end
