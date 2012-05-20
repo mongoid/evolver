@@ -11,6 +11,19 @@ describe Evolver::Migration do
     Evolver.registry.clear
   end
 
+  describe ".file" do
+
+    let(:caller) do
+      "/some/dir/db/evolver/migrations/20120519113509-rename_bands_to_artists.rb:30"
+    end
+
+    it "returns the filename" do
+      RenameBandsToArtists.file(caller).should eq(
+        "20120519113509-rename_bands_to_artists.rb"
+      )
+    end
+  end
+
   describe "#initialize" do
 
     let(:session) do
@@ -105,6 +118,19 @@ describe Evolver::Migration do
           sessions: [ :default ]
         })
       end
+    end
+  end
+
+  describe ".time" do
+
+    let(:caller) do
+      "/some/dir/db/evolver/migrations/20120519113509-rename_bands_to_artists.rb:30"
+    end
+
+    it "returns the timestamp" do
+      RenameBandsToArtists.time(caller).should eq(
+        Time.from_evolver_timestamp("20120519113509")
+      )
     end
   end
 end
