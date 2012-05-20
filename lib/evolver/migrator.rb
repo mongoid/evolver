@@ -19,7 +19,7 @@ module Evolver
     # @since 0.0.0
     def execute
       sessions.each do |session|
-        pending_migrations(session).each do |migration|
+        pending_migrations(session.with(safe: true)).each do |migration|
           migration.execute
           migration.mark_as_executed
         end
