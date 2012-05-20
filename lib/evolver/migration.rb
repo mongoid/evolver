@@ -28,7 +28,7 @@ module Evolver
       end
 
       def sessions(*names)
-        Evolver.register(self, file(caller[0]), time(caller[0]), names)
+        Evolver.register(self.name, file(caller[0]), time(caller[0]), names)
       end
 
       def time(stack)

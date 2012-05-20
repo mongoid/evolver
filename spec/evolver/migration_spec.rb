@@ -2,15 +2,6 @@ require "spec_helper"
 
 describe Evolver::Migration do
 
-  before(:all) do
-    require "db/evolver/migrations/20120519113509-rename_bands_to_artists"
-  end
-
-  after(:all) do
-    Object.__send__(:remove_const, :RenameBandsToArtists)
-    Evolver.registry.clear
-  end
-
   describe ".file" do
 
     let(:caller) do
@@ -108,7 +99,7 @@ describe Evolver::Migration do
     context "when provided a single session" do
 
       let(:registry) do
-        Evolver.registry.fetch(RenameBandsToArtists)
+        Evolver.registry.fetch("RenameBandsToArtists")
       end
 
       it "adds the migration to the session" do
