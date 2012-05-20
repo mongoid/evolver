@@ -14,7 +14,7 @@ Database Schema Evolution for MongoDB
 - Rake task `db:evolver:revert` that works in Rails, Sinatra, Padrino,
   or standalone.
 
-- Rails generator `rails g evolution` or Rake generator
+- Rails generator `rails g evolver:migration` or Rake generator
   `rake db:evolver:generate`.
 
 - Logging of evolutions that have already run in the particular environment,
