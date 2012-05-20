@@ -7,15 +7,32 @@ require "evolver/version"
 module Evolver
   extend self
 
-  def run
-    # Migrator.new(sessions).execute
-  end
-
+  # Get evolver's registry of migration metadata.
+  #
+  # @example Get the registry.
+  #   Evolver.registry
+  #
+  # @return [ Hash ] The metadata registry.
+  #
+  # @since 0.0.0
   def registry
     @registry ||= {}
   end
 
-  # Register a migration as running for the provided sessions.
+  # Register a migration's metadata with the evolver.
+  #
+  # @example Register the migration.
+  #   Evolver.register(MoveSomeData, "move_some_data.rb", time, sessions)
+  #
+  # @param [ Class ] migration The migration class.
+  # @param [ String ] file The file name of the migration.
+  # @param [ Time ] time The generation time of the migration.
+  # @param [ Array<Symbol> ] sessions The names of the sessions this applies
+  #   to.
+  #
+  # @return [ Hash ] The migration metadata.
+  #
+  # @since 0.0.0
   def register(migration, file, time, sessions)
     registry.store(migration, { file: file, time: time, sessions: sessions })
   end
