@@ -36,4 +36,9 @@ module Evolver
   def register(migration, file, time, sessions)
     registry.store(migration, { file: file, time: time, sessions: sessions })
   end
+
+  def find(migration, session)
+    metadata = registry.fetch(migration)
+    Object.const_get(migration).new(metadata[:file], session, metadata[:time])
+  end
 end

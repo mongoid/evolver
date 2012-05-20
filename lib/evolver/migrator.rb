@@ -65,11 +65,9 @@ module Evolver
     #
     # @since 0.0.0
     def pending_migrations(session)
-      executed = executed_migrations(session)
-      Evolver.registry.reduce([]) do |pending, (klass, meta)|
-        unless executed.include?(klass)
-          pending.push(Object.const_get(klass).new(meta[:file], session, meta[:time]))
-        end
+      run = executed_migrations(session)
+      Evolver.registry.keys.reduce([]) do |pending, klass|
+        pending.push(Evolver.find(klass, session)) unless run.include?(klass)
         pending
       end
     end
