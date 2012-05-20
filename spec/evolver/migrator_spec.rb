@@ -51,14 +51,12 @@ describe Evolver::Migrator do
       end
 
       it "executes the first migration" do
-        p session[:labels].find.to_a
         session[:labels].find.first["artists"].should eq(
           [ "Depeche Mode", "Erasure" ]
         )
       end
 
       it "executes the second migration" do
-        p session[:labels].find.to_a
         session[:labels].find.first["likes"].should eq(0)
       end
     end
