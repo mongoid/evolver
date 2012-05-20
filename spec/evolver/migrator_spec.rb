@@ -10,18 +10,6 @@ describe Evolver::Migrator do
       end
     end
 
-    before do
-      session[:labels].insert({
-        bands: [ "Depeche Mode", "Erasure" ],
-        founded: Time.new(1980, 1, 1),
-        name: "Mute UK"
-      })
-    end
-
-    after do
-      session[:labels].find.remove_all
-    end
-
     let(:migrator) do
       described_class.new([ session ])
     end
@@ -29,14 +17,20 @@ describe Evolver::Migrator do
     context "when no migrations have been run" do
 
       before do
+        session[:labels].insert({
+          bands: [ "Depeche Mode", "Erasure" ],
+          founded: Time.new(1980, 1, 1),
+          name: "Mute UK"
+        })
         migrator.execute
       end
 
       after do
         session[:evolver_migrations].find.remove_all
+        session[:labels].find.remove_all
       end
 
-      let(:migrations) do
+      let!(:migrations) do
         session[:evolver_migrations].find.sort(generated: 1).to_a
       end
 
