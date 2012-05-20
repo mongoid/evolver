@@ -2,12 +2,12 @@
 require "evolver/migration"
 
 module Evolver
-  module Migrator
+  class Migrator
 
     attr_reader :sessions
 
     def initialize(sessions)
-      # @sessions = sessions
+      @sessions = sessions
     end
 
     def execute
@@ -17,8 +17,6 @@ module Evolver
       # Iterate through each of the sessions, executing their pending migrations
       # in order.
       # sessions.each do |session|
-        # Setup the migrations database for the session.
-        #
         # Get the pending migrations for this session.
         # pending_migrations(session).each do |migration|
           # Execute the migration.

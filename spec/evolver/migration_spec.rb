@@ -3,7 +3,7 @@ require "spec_helper"
 describe Evolver::Migration do
 
   before(:all) do
-    require "db/evolutions/20120519113509-rename_bands_to_artists"
+    require "db/evolver/migrations/20120519113509-rename_bands_to_artists"
   end
 
   after(:all) do
@@ -39,6 +39,54 @@ describe Evolver::Migration do
 
     it "sets the timestamp" do
       migration.time.should eq(time)
+    end
+  end
+
+  describe "#mark_as_executed" do
+
+    let(:session) do
+      Moped::Session.new([ "localhost:27017" ])
+    end
+
+    let(:file) do
+      "20120519113509-rename_bands_to_artists.rb"
+    end
+
+    let(:time) do
+      Time.from_evolver_timestamp("20120519113509")
+    end
+
+    let(:migration) do
+      RenameBandsToArtists.new(file, session, time)
+    end
+
+    before do
+      session.use :evolver
+      migration.mark_as_executed
+    end
+
+    let(:stored) do
+      session[:evolver_migrations].find.first
+    end
+
+    after do
+      session[:evolver_migrations].drop
+    end
+
+    it "inserts the file name" do
+      stored["file"].should eq(file)
+    end
+
+    it "inserts the generated time" do
+      stored["generated"].should eq(time)
+    end
+
+    it "inserts the executed time" do
+      stored["executed"].should be_within(1).of(Time.now)
+    end
+
+    it "inserts the migration name" do
+      stored["migration"].should eq("RenameBandsToArtists")
     end
   end
 

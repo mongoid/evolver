@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "active_support/concern"
+require "active_support/core_ext/module/delegation"
 
 module Evolver
   module Migration
@@ -12,6 +13,12 @@ module Evolver
     end
 
     def mark_as_executed
+      session[:evolver_migrations].insert({
+        file: file,
+        generated: time,
+        migration: self.class.name,
+        executed: Time.now
+      })
     end
 
     module ClassMethods
