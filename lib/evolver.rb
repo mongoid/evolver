@@ -25,13 +25,9 @@ module Evolver
     Object.const_get(migration).new(metadata[:file], session, metadata[:time])
   end
 
-  def generate
-    # Delegate to the rails generator?
-  end
-
   def migrate
-    # Should be require all the migrations here? Methinks so.
-    # Dir.pwd /db/evolver/migrations/
+    # load_migrations
+    # Migrator.new(sessions).execute
   end
 
   # Load all the migrations in the application.
@@ -107,10 +103,10 @@ module Evolver
   end
 
   def revert
-    # We only need to require the last migration run.
+    # load_migration(last_run)
   end
 
   def stats
-    # Require all the migrations.
+    # load_migrations
   end
 end

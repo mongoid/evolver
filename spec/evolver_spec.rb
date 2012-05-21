@@ -46,10 +46,7 @@ describe Evolver do
     it "attempts to load the migrations in the directors" do
       expect {
         described_class.load_migrations
-      }.to raise_error(
-        LoadError,
-        "cannot load such file -- #{path}/migration.rb"
-      )
+      }.to raise_error(LoadError)
     end
   end
 
