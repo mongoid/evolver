@@ -34,6 +34,34 @@ module Evolver
     # Dir.pwd /db/evolver/migrations/
   end
 
+  # Load all the migrations in the application.
+  #
+  # @example Load all the migrations.
+  #   Evolver.load_migrations
+  #
+  # @return [ Array<String> ] The migration filenames.
+  #
+  # @since 0.0.0
+  def load_migrations
+    Dir.glob("#{migrations_path}/*.rb").each do |filename|
+      load_migration(filename)
+    end
+  end
+
+  # Load the migration for the provided filename.
+  #
+  # @example Load the migration.
+  #   Evolver.load_migration("20120101120000_move_data.rb")
+  #
+  # @param [ String ] filename The name of the migration file.
+  #
+  # @return [ true, false ] If the require succeeded.
+  #
+  # @since 0.0.0
+  def load_migration(filename)
+    require("#{migrations_path}/#{filename}")
+  end
+
   # Get the path where evolver's migrations are stored. This is
   # db/evolver/migrations from the root of whatever framework you are using or
   # the root of your standalone project.

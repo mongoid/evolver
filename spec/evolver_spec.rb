@@ -29,6 +29,30 @@ describe Evolver do
     end
   end
 
+  describe ".load_migrations" do
+
+    let(:path) do
+      described_class.migrations_path
+    end
+
+    let(:files) do
+      [ "migration.rb" ]
+    end
+
+    before do
+      Dir.should_receive(:glob).with("#{path}/*.rb").and_return(files)
+    end
+
+    it "attempts to load the migrations in the directors" do
+      expect {
+        described_class.load_migrations
+      }.to raise_error(
+        LoadError,
+        "cannot load such file -- #{path}/migration.rb"
+      )
+    end
+  end
+
   describe ".migrations_path" do
 
     let(:path) do
