@@ -29,6 +29,21 @@ describe Evolver do
     end
   end
 
+  describe ".migrations_path" do
+
+    let(:path) do
+      described_class.migrations_path
+    end
+
+    let(:expected) do
+      File.expand_path(File.join(__FILE__, "..", "..", "db/evolver/migrations"))
+    end
+
+    it "returns the working directoy + /db/evolver/migrations" do
+      path.should eq(expected)
+    end
+  end
+
   describe ".registry" do
 
     let(:registry) do

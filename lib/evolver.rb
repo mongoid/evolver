@@ -26,9 +26,26 @@ module Evolver
   end
 
   def generate
+    # Delegate to the rails generator?
   end
 
   def migrate
+    # Should be require all the migrations here? Methinks so.
+    # Dir.pwd /db/evolver/migrations/
+  end
+
+  # Get the path where evolver's migrations are stored. This is
+  # db/evolver/migrations from the root of whatever framework you are using or
+  # the root of your standalone project.
+  #
+  # @example Get the migrations path.
+  #   Evolver.migrations_path
+  #
+  # @return [ String ] "/path/to/my/app/db/evolver/migrations"
+  #
+  # @since 0.0.0
+  def migrations_path
+    File.join(Dir.pwd, "db/evolver/migrations")
   end
 
   # Get evolver's registry of migration metadata.
@@ -62,8 +79,10 @@ module Evolver
   end
 
   def revert
+    # We only need to require the last migration run.
   end
 
   def stats
+    # Require all the migrations.
   end
 end
