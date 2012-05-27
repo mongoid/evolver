@@ -10,6 +10,6 @@ require "db/evolver/migrations/20120520152200_add_likes_to_label"
 
 module Rails
   def self.root
-    Dir.pwd
+    File.join(Dir.pwd, "spec")
   end
 end

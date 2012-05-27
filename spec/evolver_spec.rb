@@ -57,7 +57,7 @@ describe Evolver do
     end
 
     let(:expected) do
-      File.expand_path(File.join(__FILE__, "..", "..", "db/evolver/migrations"))
+      File.expand_path(File.join(__FILE__, "..", "db/evolver/migrations"))
     end
 
     it "returns the working directoy + /db/evolver/migrations" do
