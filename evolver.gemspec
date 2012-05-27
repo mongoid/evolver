@@ -16,9 +16,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.add_dependency("activesupport", ["~> 3.2"])
-  s.add_dependency("railties", ["~> 3.2"])
   s.add_dependency("moped", ["~> 1.0.0.beta"])
+  s.add_dependency("railties", ["~> 3.2"])
 
   s.add_development_dependency("guard-rspec", ["~> 0.7"])
   s.add_development_dependency("rspec", ["~> 2.10"])

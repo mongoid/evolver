@@ -60,8 +60,14 @@ module Evolver
     require("#{migrations_path}/#{filename}")
   end
 
+  # Get the path to the configuration.
+  #
+  # @example Get the configuration path.
+  #   Evolver.config_path
+  #
+  # @return [ String ] The path to the configuration.
   def config_path
-    File.join(Dir.pwd, "config")
+    File.join(Rails.root, "config")
   end
 
   # Get the path where evolver's migrations are stored. This is
@@ -75,7 +81,7 @@ module Evolver
   #
   # @since 0.0.0
   def migrations_path
-    File.join(Dir.pwd, "db/evolver/migrations")
+    File.join(Rails.root, "db/evolver/migrations")
   end
 
   # Get evolver's registry of migration metadata.

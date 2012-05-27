@@ -8,7 +8,6 @@ PATH
   remote: .
   specs:
     evolver (0.0.0)
-      activesupport (~> 3.2)
       moped (~> 1.0.0.beta)
       railties (~> 3.2)
 

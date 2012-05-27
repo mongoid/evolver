@@ -7,3 +7,9 @@ require "rspec"
 
 require "db/evolver/migrations/20120519113509_rename_bands_to_artists"
 require "db/evolver/migrations/20120520152200_add_likes_to_label"
+
+module Rails
+  def self.root
+    Dir.pwd
+  end
+end
