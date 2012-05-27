@@ -50,6 +50,62 @@ describe Evolver do
     end
   end
 
+  describe ".migrate" do
+
+    let(:session) do
+      Moped::Session.new([ "localhost:27017" ])
+    end
+
+    let(:migrations) do
+      session[:evolver_migrations]
+    end
+
+    let(:labels) do
+      session[:labels]
+    end
+
+    before do
+      session.use(:evolver)
+      migrations.find.remove_all
+      labels.insert({ bands: [ "Placebo", "Depeche Mode" ] })
+    end
+
+    context "when no migrations have been run" do
+
+      before do
+        described_class.migrate
+      end
+
+      let(:migration_one) do
+        migrations.find(migration: "RenameBandsToArtists").first
+      end
+
+      let(:migration_two) do
+        migrations.find(migration: "AddLikesToLabel").first
+      end
+
+      let(:label) do
+        labels.find.first
+      end
+
+      it "executes the first migration" do
+        label["artists"].should eq([ "Placebo", "Depeche Mode" ])
+      end
+
+      it "adds the first migration metadata" do
+        migration_one["executed"].should be_within(1).of(Time.now)
+      end
+
+      it "executes the second migration" do
+        label["likes"].should eq(0)
+      end
+
+      it "adds the second migration metadata" do
+        migration_two["executed"].should be_within(1).of(Time.now)
+      end
+    end
+  end
+
   describe ".migrations_path" do
 
     let(:path) do

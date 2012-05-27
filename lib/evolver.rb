@@ -27,9 +27,17 @@ module Evolver
     Object.const_get(migration).new(metadata[:file], session, metadata[:time])
   end
 
+  # Run all migrations for all sessions that have not run yet.
+  #
+  # @example Run all the migrations.
+  #   Evolver.migrate
+  #
+  # @return [ true ] True if all migrations succeeded.
+  #
+  # @since 0.0.0
   def migrate
-    # load_migrations
-    # Migrator.new(sessions).execute
+    load_migrations
+    Migrator.new(sessions).execute and true
   end
 
   # Load all the migrations in the application.
@@ -57,7 +65,7 @@ module Evolver
   #
   # @since 0.0.0
   def load_migration(filename)
-    require("#{migrations_path}/#{filename}")
+    require filename
   end
 
   # Get the path where evolver's migrations are stored. This is
@@ -110,5 +118,14 @@ module Evolver
 
   def stats
     # load_migrations
+  end
+
+  private
+
+  # @todo: Durran: start with 1 session, localhost and expand on that.
+  def sessions
+    session = Moped::Session.new([ "localhost:27017" ])
+    session.use(:evolver)
+    [ session ]
   end
 end
