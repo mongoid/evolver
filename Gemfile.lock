@@ -10,6 +10,7 @@ PATH
     evolver (0.0.0)
       activesupport (~> 3.2)
       moped (~> 1.0.0.beta)
+      railties (~> 3.2)
 
 GEM
   remote: http://rubygems.org/
@@ -83,6 +84,5 @@ DEPENDENCIES
   evolver!
   guard-rspec (~> 0.7)
   moped!
-  railties (~> 3.2)
   rake
   rspec (~> 2.10)

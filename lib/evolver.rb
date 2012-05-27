@@ -2,8 +2,10 @@
 require "moped"
 require "evolver/extensions"
 require "evolver/migrator"
-require "evolver/railtie" if defined?(Rails)
+require "evolver/railtie"
+require "evolver/sessions"
 require "evolver/version"
+require "rails/generators/evolver"
 
 module Evolver
   extend self
@@ -56,6 +58,10 @@ module Evolver
   # @since 0.0.0
   def load_migration(filename)
     require("#{migrations_path}/#{filename}")
+  end
+
+  def config_path
+    File.join(Dir.pwd, "config")
   end
 
   # Get the path where evolver's migrations are stored. This is
