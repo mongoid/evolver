@@ -1,12 +1,10 @@
 # encoding: utf-8
-require "evolver/config/environment"
-
 module Evolver
   module Config
     extend self
 
-    def load!(path, environment = nil)
-      settings = Environment.load_yaml(path, environment)
+    def load!(path)
+      settings = load_yaml(path, environment)
       load_configuration(settings) if settings.present?
       settings
     end
@@ -24,6 +22,10 @@ module Evolver
     def load_configuration(settings)
       configuration = settings.with_indifferent_access
       self.sessions = configuration[:sessions]
+    end
+
+    def load_yaml(path)
+      YAML.load(ERB.new(File.new(path).read).result)[Rails.env]
     end
   end
 end

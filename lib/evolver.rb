@@ -66,6 +66,8 @@ module Evolver
   #   Evolver.config_path
   #
   # @return [ String ] The path to the configuration.
+  #
+  # @since 0.0.0
   def config_path
     File.join(Rails.root, "config")
   end
