@@ -53,7 +53,7 @@ describe Evolver do
   describe ".migrate" do
 
     let(:session) do
-      Moped::Session.new([ "localhost:27017" ])
+      Moped::Session.new([ "localhost:27017" ], safe: true)
     end
 
     let(:migrations) do
