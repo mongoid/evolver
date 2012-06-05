@@ -66,8 +66,8 @@ describe Evolver do
 
     before do
       session.use(:evolver)
+      labels.insert({ bands: [ "Placebo", "Depeche Mode" ]})
       migrations.find.remove_all
-      labels.insert({ bands: [ "Placebo", "Depeche Mode" ] })
     end
 
     context "when no migrations have been run" do
