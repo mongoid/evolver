@@ -3,7 +3,13 @@ Evolver [![Build Status](https://secure.travis-ci.org/mongoid/evolver.png?branch
 
 Database Schema Evolution for MongoDB
 
-# Roadmap
+Project Tracking
+----------------
+
+* [Mongoid Google Group](http://groups.google.com/group/mongoid)
+* [Evolver Code Climate](https://codeclimate.com/github/mongoid/evolver)
+
+# Roadmap to 1.0.0
 
 - Generation of migrations in `db/evolver/migrations` so as not to conflict
   with AR migrations.
@@ -31,7 +37,7 @@ Database Schema Evolution for MongoDB
 Compatibility
 -------------
 
-Evolver is tested against MRI 1.9.2, 1.9.3, 2.0.0, and JRuby (1.9).
+Evolver is tested against MRI 1.9.3, 2.0.0, and JRuby (1.9).
 
 License
 -------
