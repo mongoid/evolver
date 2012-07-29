@@ -1,7 +1,7 @@
 # encoding: utf-8
 namespace :evolver do
 
-  desc "Execute any pending MongoDB data migrations."
+  desc "Execute any pending MongoDB data migrations on all sessions."
   task migrate: :environment do
     Evolver.migrate
   end
