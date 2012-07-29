@@ -1,8 +1,10 @@
 # encoding: utf-8
+require "evolver/loggable"
 require "evolver/migration"
 
 module Evolver
   class Migrator
+    include Loggable
 
     attr_reader :sessions
 
@@ -19,8 +21,9 @@ module Evolver
     # @since 0.0.0
     def execute
       sessions.each_pair do |name, session|
-        pending(name, session.with(safe: true, consistency: :strong)).each do |migration|
+        pending(name, session.with(safe: true, consistency: :strong)) do |migration|
           migration.execute
+          log_execution(migration, name)
           migration.mark_as_executed
         end
       end
@@ -70,10 +73,42 @@ module Evolver
       Evolver.registry.keys.reduce([]) do |pending, klass|
         pending.push(Evolver.find(klass, session)) if runnable?(run, klass, name)
         pending
+      end.each do |migration|
+        yield(migration)
       end
     end
 
     private
+
+    # Log a message.
+    #
+    # @api private
+    #
+    # @example Log a message.
+    #   migrator.log(:success, "it worked.")
+    #
+    # @param [ Symbol ] type The type of message.
+    # @param [ Sting ] message The message.
+    #
+    # @since 0.0.0
+    def log(type, message)
+      logger.info("  EVOLVER: #{type.upcase} #{message}")
+    end
+
+    # Log an execution message.
+    #
+    # @api private
+    #
+    # @example Log an execution message.
+    #   migrator.log_execution(Migration, :default)
+    #
+    # @param [ Migration ] migration The migration.
+    # @param [ Symbol ] name The session name.
+    #
+    # @since 0.0.0
+    def log_execution(migration, name)
+      log(:success, "#{migration.class.name} on session #{name.inspect}")
+    end
 
     # Can the migration be run now, and in the session?
     #
