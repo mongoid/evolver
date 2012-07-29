@@ -133,6 +133,12 @@ module Evolver
     end
   end
 
+  # Get the stats of run and pending migrations.
+  #
+  # @example Get the stats.
+  #   Evolver.stats
+  #
+  # @since 0.0.0
   def stats
     load_migrations
     logger.info(Migrator.new(sessions).stats)
