@@ -72,6 +72,10 @@ describe Evolver do
         default[:evolver_migrations].find.remove_all
         mongohq[:labels].find.remove_all
         mongohq[:evolver_migrations].find.remove_all
+        default.use(:evolver_secondary)
+        default[:labels].find.remove_all
+        default[:evolver_migrations].find.remove_all
+        default.use(:evolver_test)
       end
 
       context "when migrating on a mix of sessions" do
@@ -153,6 +157,18 @@ describe Evolver do
         it "does not flag the third migration as run on the default session" do
           default_migrations.find(
             migration: "AddImpressionsToLabel", executed: { "$exists" => true }
+          ).count.should eq(0)
+        end
+
+        it "runs the migrations on the secondary database" do
+          default.use(:evolver_secondary)
+          default[:labels].find.one["bands"].should eq([ "Tool" ])
+        end
+
+        it "stores migration information for secondary database in default" do
+          default.use(:evolver_test)
+          default[:evolver_migrations].find(
+            migration: "CopyLabelsToSecondary", executed: { "$exists" => true }
           ).count.should eq(0)
         end
       end
