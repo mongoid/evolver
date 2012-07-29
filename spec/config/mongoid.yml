@@ -1,0 +1,21 @@
+test:
+  sessions:
+    default:
+      database: evolver_test
+      hosts:
+        - localhost:27017
+    mongohq_single:
+      database: <%=ENV["MONGOHQ_SINGLE_NAME"]%>
+      username: <%=ENV["MONGOHQ_SINGLE_USER"]%>
+      password: <%=ENV["MONGOHQ_SINGLE_PASS"]%>
+      hosts:
+        - <%=ENV["MONGOHQ_SINGLE_URL"]%>
+    mongohq_repl:
+      database: <%=ENV["MONGOHQ_REPL_NAME"]%>
+      username: <%=ENV["MONGOHQ_REPL_USER"]%>
+      password: <%=ENV["MONGOHQ_REPL_PASS"]%>
+      hosts:
+        - <%=ENV["MONGOHQ_REPL_1_URL"]%>
+        - <%=ENV["MONGOHQ_REPL_2_URL"]%>
+    mongohq_repl_uri:
+      uri: <%= ENV["MONGOHQ_REPL_URI"]%>

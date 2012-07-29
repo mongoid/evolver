@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "moped"
+require "mongoid"
 require "evolver/extensions"
 require "evolver/migrator"
 require "evolver/railtie"
