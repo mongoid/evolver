@@ -1,7 +1,7 @@
 class AddLikesToLabel
   include Evolver::Migration
 
-  sessions :default
+  sessions :default, :mongohq_repl
 
   def execute
     session[:labels].find.update_all("$set" => { "likes" => 0 })

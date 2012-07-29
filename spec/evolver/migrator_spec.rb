@@ -3,9 +3,7 @@ require "spec_helper"
 describe Evolver::Migrator do
 
   let(:session) do
-    Moped::Session.new([ "localhost:27017" ]).tap do |_session|
-      _session.use :evolver
-    end
+    Mongoid.default_session
   end
 
   before(:all) do
@@ -15,7 +13,7 @@ describe Evolver::Migrator do
   describe "#execute" do
 
     let(:migrator) do
-      described_class.new([ session ])
+      described_class.new({ default: session })
     end
 
     context "when no migrations have been run" do
@@ -65,15 +63,15 @@ describe Evolver::Migrator do
   describe "#initialize" do
 
     let(:session) do
-      Moped::Session.new([ "localhost:27017" ])
+      Mongoid.default_session
     end
 
     let(:migrator) do
-      described_class.new([ session ])
+      described_class.new(default: session)
     end
 
     it "sets the sessions" do
-      migrator.sessions.should eq([ session ])
+      migrator.sessions.should eq(default: session)
     end
   end
 end

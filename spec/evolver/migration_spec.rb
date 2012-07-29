@@ -18,7 +18,7 @@ describe Evolver::Migration do
   describe "#initialize" do
 
     let(:session) do
-      Moped::Session.new([ "localhost:27017" ])
+      Mongoid.default_session
     end
 
     let(:file) do
@@ -49,7 +49,7 @@ describe Evolver::Migration do
   describe "#mark_as_executed" do
 
     let(:session) do
-      Moped::Session.new([ "localhost:27017" ])
+      Mongoid.default_session
     end
 
     let(:file) do

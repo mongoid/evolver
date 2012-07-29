@@ -21,3 +21,14 @@ module Rails
 end
 
 Mongoid.load!(File.join(File.dirname(__FILE__), "config", "mongoid.yml"))
+
+def mongohq_connectable?
+  ENV["MONGOHQ_REPL_PASS"].present?
+end
+
+RSpec.configure do |config|
+
+  config.filter_run_excluding(config: ->(value){
+    return true if value == :mongohq && !mongohq_connectable?
+  })
+end

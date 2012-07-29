@@ -18,8 +18,8 @@ module Evolver
     #
     # @since 0.0.0
     def execute
-      sessions.each do |session|
-        pending_migrations(session.with(safe: true)).each do |migration|
+      sessions.each_pair do |name, session|
+        pending(name, session.with(safe: true, consistency: :strong)).each do |migration|
           migration.execute
           migration.mark_as_executed
         end
@@ -57,19 +57,41 @@ module Evolver
     # during this run.
     #
     # @example Get the pending migrations.
-    #   migrator.pending_migrations(session)
+    #   migrator.pending(session)
     #
+    # @param [ Symbol ] name The name of the session.
     # @param [ Moped::Session ] session The session to use.
     #
     # @return [ Array<Migration> ] The migrations that need to run.
     #
     # @since 0.0.0
-    def pending_migrations(session)
+    def pending(name, session)
       run = executed_migrations(session)
       Evolver.registry.keys.reduce([]) do |pending, klass|
-        pending.push(Evolver.find(klass, session)) unless run.include?(klass)
+        pending.push(Evolver.find(klass, session)) if runnable?(run, klass, name)
         pending
       end
+    end
+
+    private
+
+    # Can the migration be run now, and in the session?
+    #
+    # @api private
+    #
+    # @example Is the migration runnable?
+    #   migrator.runnable?(run, klass, name)
+    #
+    # @param [ Array<Migration> ] run The current migration run.
+    # @param [ Class ] klass The Migration class.
+    # @param [ Symbol, String ] The session key.
+    #
+    # @return [ true, false ] If the migration is runnable.
+    #
+    # @since 0.0.0
+    def runnable?(run, klass, name)
+      metadata = Evolver.registry.fetch(klass)
+      !run.include?(klass) && metadata[:sessions].include?(name)
     end
   end
 end

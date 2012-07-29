@@ -5,7 +5,7 @@ describe Evolver do
   describe ".find" do
 
     let(:session) do
-      Moped::Session.new([ "localhost:27017" ])
+      Mongoid.default_session
     end
 
     context "when the migration exists" do
@@ -50,58 +50,111 @@ describe Evolver do
     end
   end
 
-  describe ".migrate" do
+  describe ".migrate", config: :mongohq do
 
-    let(:session) do
-      Moped::Session.new([ "localhost:27017" ], safe: true)
+    let(:default) do
+      Mongoid.default_session
     end
 
-    let(:migrations) do
-      session[:evolver_migrations]
-    end
-
-    let(:labels) do
-      session[:labels]
-    end
-
-    before do
-      session.use(:evolver)
-      labels.insert({ bands: [ "Placebo", "Depeche Mode" ]})
-      migrations.find.remove_all
+    let(:mongohq) do
+      Mongoid.session(:mongohq_repl)
     end
 
     context "when no migrations have been run" do
 
-      before do
-        described_class.migrate
+      before(:all) do
+        default[:labels].insert({ bands: [ "Placebo", "Depeche Mode" ]})
+        mongohq[:labels].insert({ bands: [ "Placebo", "Depeche Mode" ]})
       end
 
-      let(:migration_one) do
-        migrations.find(migration: "RenameBandsToArtists").first
+      after(:all) do
+        default[:labels].find.remove_all
+        default[:evolver_migrations].find.remove_all
+        mongohq[:labels].find.remove_all
+        mongohq[:evolver_migrations].find.remove_all
       end
 
-      let(:migration_two) do
-        migrations.find(migration: "AddLikesToLabel").first
-      end
+      context "when migrating on a mix of sessions" do
 
-      let(:label) do
-        labels.find.first
-      end
+        before(:all) do
+          described_class.migrate
+        end
 
-      it "executes the first migration" do
-        label["artists"].should eq([ "Placebo", "Depeche Mode" ])
-      end
+        let(:default_label) do
+          default[:labels].find.one
+        end
 
-      it "adds the first migration metadata" do
-        migration_one["executed"].should be_within(1).of(Time.now)
-      end
+        let(:mongohq_label) do
+          mongohq[:labels].find.one
+        end
 
-      it "executes the second migration" do
-        label["likes"].should eq(0)
-      end
+        let(:default_migrations) do
+          default[:evolver_migrations]
+        end
 
-      it "adds the second migration metadata" do
-        migration_two["executed"].should be_within(1).of(Time.now)
+        let(:mongohq_migrations) do
+          mongohq[:evolver_migrations]
+        end
+
+        it "runs the first migration on the default session" do
+          default_label["artists"].should eq([ "Placebo", "Depeche Mode" ])
+        end
+
+        it "flags the first migration as run on the default session" do
+          default_migrations.find(
+            migration: "RenameBandsToArtists", executed: { "$exists" => true }
+          ).count.should eq(1)
+        end
+
+        it "does not run the first migration on the mongohq session" do
+          mongohq_label["artists"].should be_nil
+        end
+
+        it "does not flag the first migration as run on the mongohq session" do
+          mongohq_migrations.find(
+            migration: "RenameBandsToArtists", executed: { "$exists" => true }
+          ).count.should eq(0)
+        end
+
+        it "runs the second migration on the default session" do
+          default_label["likes"].should eq(0)
+        end
+
+        it "flags the second migration as run on the default session" do
+          default_migrations.find(
+            migration: "AddLikesToLabel", executed: { "$exists" => true }
+          ).count.should eq(1)
+        end
+
+        it "runs the second migration on the mongohq session" do
+          mongohq_label["likes"].should eq(0)
+        end
+
+        it "flags the second migration as run on the mongohq session" do
+          mongohq_migrations.find(
+            migration: "AddLikesToLabel", executed: { "$exists" => true }
+          ).count.should eq(1)
+        end
+
+        it "runs the third migration on the mongohq session" do
+          mongohq_label["impressions"].should eq(0)
+        end
+
+        it "flags the third migration as run on the mongohq session" do
+          mongohq_migrations.find(
+            migration: "AddImpressionsToLabel", executed: { "$exists" => true }
+          ).count.should eq(1)
+        end
+
+        it "does not run the third migration on the default session" do
+          default_label["impressions"].should be_nil
+        end
+
+        it "does not flag the third migration as run on the default session" do
+          default_migrations.find(
+            migration: "AddImpressionsToLabel", executed: { "$exists" => true }
+          ).count.should eq(0)
+        end
       end
     end
   end

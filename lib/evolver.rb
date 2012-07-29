@@ -116,16 +116,22 @@ module Evolver
     # load_migration(last_run)
   end
 
-  def stats
-    # load_migrations
+  # Get all the sessions configured in the mongoid.yml
+  #
+  # @example Get all the sessions.
+  #   Evolver.sessions
+  #
+  # @return [ Array<Moped::Session> ] The sessions.
+  #
+  # @since 0.0.0
+  def sessions
+    Mongoid.sessions.keys.reduce({}) do |_sessions, name|
+      _sessions[name.to_sym] = Mongoid.session(name)
+      _sessions
+    end
   end
 
-  private
-
-  # @todo: Durran: start with 1 session, localhost and expand on that.
-  def sessions
-    session = Moped::Session.new([ "localhost:27017" ])
-    session.use(:evolver)
-    [ session ]
+  def stats
+    # load_migrations
   end
 end
