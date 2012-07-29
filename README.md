@@ -13,24 +13,14 @@ Project Tracking
 
 - Generation of migrations in `db/evolver/migrations` so as not to conflict
   with AR migrations.
-
-- Rake task `evolver:migrate` that works in Rails, Sinatra, Padrino,
-  or standalone.
-
-- Rake task `evolver:revert` that works in Rails, Sinatra, Padrino,
-  or standalone.
-
-- Rails generator `rails g evolver:migration` or Rake generator
-  `rake evolver:generate`.
-
+- Rake task `evolver:migrate`
+- Rake task `evolver:revert`
+- Rails generator `rails g evolver:migration`.
 - Logging of evolutions that have already run in the particular environment,
   indicating they can be deleted.
-
 - Multi-database and multi-session evolutions, with evolver keeping track of
   what data has been evolved and where.
-
 - Ensuring all migrations always run in safe mode.
-
 - Rake task `evolver:stats` that gives information on run and pending
   migrations on each session.
 
