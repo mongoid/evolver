@@ -6,6 +6,8 @@ module Evolver
   class Migrator
     include Loggable
 
+    TEMPLATE = File.join(File.dirname(__FILE__), "stats.txt.erb")
+
     attr_reader :sessions
 
     # Execute the migrations. This grabs all pending migrations in order and
@@ -21,7 +23,7 @@ module Evolver
     # @since 0.0.0
     def execute
       sessions.each_pair do |name, session|
-        pending(name, session.with(safe: true, consistency: :strong)) do |migration|
+        pending(name, session.with(safe: true, consistency: :strong)).each do |migration|
           migration.execute
           log_execution(migration, name)
           migration.mark_as_executed
@@ -33,15 +35,15 @@ module Evolver
     # been run. This is so we can determine what not to run.
     #
     # @example Get the already executed migrations for a session.
-    #   migrator.executed_migrations(session)
+    #   migrator.executed(session)
     #
     # @param [ Moped::Session ] session The session to use.
     #
     # @return [ Array<String> ] The class names of the run migrations.
     #
     # @since 0.0.0
-    def executed_migrations(session)
-      session[:evolver_migrations].find.select(_id: 0, migration: 1).entries
+    def executed(session)
+      session[:evolver_migrations].find.to_a
     end
 
     # Instantiate the new migrator. This object handles the migration runs.
@@ -69,14 +71,25 @@ module Evolver
     #
     # @since 0.0.0
     def pending(name, session)
-      run = executed_migrations(session)
+      run = executed(session)
       Evolver.registry.keys.reduce([]) do |pending, klass|
         pending.push(Evolver.find(klass, session)) if runnable?(run, klass, name)
         pending
-      end.each do |migration|
-        yield(migration)
       end
     end
+
+    # Render the stats for the migrator.
+    #
+    # @example Render the stats.
+    #   migrator.render
+    #
+    # @return [ String ] The rendered stats.
+    #
+    # @since 0.0.0
+    def render
+      ERB.new(File.read(TEMPLATE), 0, ">").result(binding)
+    end
+    alias :stats :render
 
     private
 
@@ -126,7 +139,8 @@ module Evolver
     # @since 0.0.0
     def runnable?(run, klass, name)
       metadata = Evolver.registry.fetch(klass)
-      !run.include?(klass) && metadata[:sessions].include?(name)
+      executed = run.map{ |doc| doc["migration"] }
+      !executed.include?(klass) && metadata[:sessions].include?(name)
     end
   end
 end

@@ -1,6 +1,7 @@
 # encoding: utf-8
 require "mongoid"
 require "evolver/extensions"
+require "evolver/loggable"
 require "evolver/migrator"
 require "evolver/railtie"
 require "evolver/sessions"
@@ -8,6 +9,7 @@ require "evolver/version"
 require "rails/generators/evolver"
 
 module Evolver
+  include Loggable
   extend self
 
   # Get an instance of the migration class from the registry with the provided
@@ -132,6 +134,7 @@ module Evolver
   end
 
   def stats
-    # load_migrations
+    load_migrations
+    logger.info(Migrator.new(sessions).stats)
   end
 end

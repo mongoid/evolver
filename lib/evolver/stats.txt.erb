@@ -1,0 +1,13 @@
+
+  EVOLVER: STATS
+<% sessions.each_pair do |name, session| %>
+  <% executed_migrations = executed(session) %>
+  <% pending_migrations  = pending(name, session) %>
+Session: <%= name.inspect %> 
+<% executed_migrations.each do |doc| %>
+    [ done ] <%= doc["migration"] %> - <%= doc["executed"] %> 
+<% end %>
+<% pending_migrations.each do |migration| %>
+    [ pend ] <%= migration.class %> 
+<% end %>
+<% end %>

@@ -17,7 +17,7 @@ module Evolver
     # @since 0.0.0
     def logger
       return @logger if defined?(@logger)
-      @logger = rails_logger || default_logger
+      @logger = default_logger
     end
 
     # Set the logger.
@@ -50,20 +50,6 @@ module Evolver
       logger = Logger.new($stdout)
       logger.level = Logger::INFO
       logger
-    end
-
-    # Get the Rails logger if it's defined.
-    #
-    # @api private
-    #
-    # @example Get Rails' logger.
-    #   Loggable.rails_logger
-    #
-    # @return [ Logger ] The Rails logger.
-    #
-    # @since 0.0.0
-    def rails_logger
-      defined?(::Rails) && ::Rails.respond_to?(:logger) && ::Rails.logger
     end
   end
 end
