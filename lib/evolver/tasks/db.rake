@@ -1,11 +1,6 @@
 # encoding: utf-8
 namespace :evolver do
 
-  desc "Generate a new MongoDB data migration."
-  task generate: :environment do
-    Evolver.generate
-  end
-
   desc "Execute any pending MongoDB data migrations."
   task migrate: :environment do
     Evolver.migrate
