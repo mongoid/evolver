@@ -51,7 +51,7 @@ module Evolver
   #
   # @since 0.0.0
   def load_migrations
-    Dir.glob("#{migrations_path}/*.rb").each do |filename|
+    Dir.glob("#{migrations_path}/*.rb").sort.each do |filename|
       load_migration(filename)
     end
   end
