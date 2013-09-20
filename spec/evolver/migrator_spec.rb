@@ -6,17 +6,34 @@ describe Evolver::Migrator do
     Mongoid.default_session
   end
 
-  before(:all) do
+  before do
     session[:evolver_migrations].find.remove_all
   end
 
   describe "#execute" do
 
-    let(:migrator) do
-      described_class.new({ default: session })
+    context "dry run" do
+
+      let(:migrator) do
+        described_class.new({ default: session }, { dry: true })
+      end
+
+      before { migrator.execute }
+
+      let(:migrations) do
+        session[:evolver_migrations].find.sort(generated: 1).to_a
+      end
+
+      it "does not execute the migrations" do
+        migrations.count.should eq(0)
+      end
     end
 
     context "when no migrations have been run" do
+
+      let(:migrator) do
+        described_class.new({ default: session })
+      end
 
       before do
         session[:labels].insert({
@@ -28,11 +45,10 @@ describe Evolver::Migrator do
       end
 
       after do
-        session[:evolver_migrations].find.remove_all
         session[:labels].find.remove_all
       end
 
-      let!(:migrations) do
+      let(:migrations) do
         session[:evolver_migrations].find.sort(generated: 1).to_a
       end
 
