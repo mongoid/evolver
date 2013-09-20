@@ -37,9 +37,9 @@ module Evolver
   # @return [ true ] True if all migrations succeeded.
   #
   # @since 0.0.0
-  def migrate
+  def migrate(options = {})
     load_migrations
-    Migrator.new(sessions).execute and true
+    Migrator.new(sessions, options).execute and true
   end
 
   # Load all the migrations in the application.

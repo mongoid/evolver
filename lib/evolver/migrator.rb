@@ -8,7 +8,11 @@ module Evolver
 
     TEMPLATE = File.join(File.dirname(__FILE__), "stats.txt.erb")
 
-    attr_reader :sessions
+    DEFAULT_OPTIONS = {
+      dry: false
+    }
+
+    attr_reader :sessions, :dry, :options
 
     # Execute the migrations. This grabs all pending migrations in order and
     # calls execute on them for each session that it has specified it runs on.
@@ -22,11 +26,13 @@ module Evolver
     #
     # @since 0.0.0
     def execute
+      log(:info, "DRY RUN: Migrations will only be logged and *NOT* executed.") if dry
+
       sessions.each_pair do |name, session|
         pending(name, session.with(safe: true, consistency: :strong)).each do |migration|
-          migration.execute
+          migration.execute unless dry
           log_execution(migration, name)
-          migration.mark_as_executed
+          migration.mark_as_executed unless dry
         end
       end
     end
@@ -52,10 +58,13 @@ module Evolver
     #   Migrator.new([ session ])
     #
     # @param [ Array<Moped::Session> ] sessions The sessions to migrate on.
+    # @param [ Hash ] options Migration options.
     #
     # @since 0.0.0
-    def initialize(sessions)
+    def initialize(sessions, options = {})
+      @options  = DEFAULT_OPTIONS.merge(options)
       @sessions = sessions
+      @dry      = @options[:dry] || false
     end
 
     # Get the list of pending migrations - those that need to be executed
